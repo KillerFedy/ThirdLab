@@ -102,13 +102,13 @@ for i in range(len(x_arr_stars)):
     rnx_values.append(Rn(10, x0, x_arr, x_arr_stars[i]))
     t = abs(x_arr_stars[i] - x0) / h
     Lnx = 0
-    if (x_arr_stars[i] <= x_arr[1]):
+    if (x_arr_stars[i] <= x_arr[3]):
         Lnx = firstNewton(10, difTable, t)
-    if (x_arr_stars[i] >= x_arr[len(x_arr)-2]):
+    if (x_arr_stars[i] >= x_arr[len(x_arr)-4]):
         Lnx = secondNewton(10, difTable, t)
-    if (x_arr_stars[i] > x_arr[1] and x_arr_stars[i] < x_arr[int(len(x_arr)/2)]):
+    if (x_arr_stars[i] > x_arr[3] and x_arr_stars[i] < x_arr[int(len(x_arr)/2)]):
         Lnx = firstGaus(10, difTable, t)
-    if (x_arr_stars[i] < x_arr[len(x_arr)-2] and x_arr_stars[i] > x_arr[int(len(x_arr)/2)]):
+    if (x_arr_stars[i] < x_arr[len(x_arr)-4] and x_arr_stars[i] > x_arr[int(len(x_arr)/2)]):
         Lnx = secondGaus(10, difTable, t)
 
     rnx = Lnx - f(x_arr_stars[i])

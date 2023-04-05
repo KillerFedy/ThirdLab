@@ -76,7 +76,7 @@ def secondGaus(nodes, differenceTable, t):
 
 
 def Rn(nodes, x0, x_values, x_star):
-    result = abs(derivative(diff_func, x0, n=nodes, order=nodes+2))
+    result = abs(derivative(diff_func, x0, n=nodes, order=nodes+1))
     result /= factorial(nodes+1)
     for x in x_values:
         result *= (x_star - x)
@@ -85,14 +85,34 @@ def Rn(nodes, x0, x_values, x_star):
 
 a = 0.4
 b = 0.9
-x1 = 0.52
-x2 = 0.42
-x3 = 0.87
-x4 = 0.67
 x_arr_stars = [0.42, 0.87, 0.67]
 
-x_arr = linspace(a, b, num=15)
-difTable = finite_differences_table(x_arr_stars)
+x_arr = linspace(a, b, num=10)
+rnx_arr = []
+rnx_values = []
+difTable = finite_differences_table(x_arr)
 h = x_arr[1] - x_arr[0]
+for i in range(len(x_arr_stars)):
+    distance = 1000000
+    x0 = -1
+    for j in range(len(x_arr)):
+        if abs(x_arr[j] - x_arr_stars[i]) < distance:
+            distance = x_arr[j] - x_arr_stars[i]
+            x0 = x_arr[j]
+    rnx_values.append(Rn(10, x0, x_arr, x_arr_stars[i]))
+    t = abs(x_arr_stars[i] - x0) / h
+    Lnx = 0
+    if (x_arr_stars[i] <= x_arr[1]):
+        Lnx = firstNewton(10, difTable, t)
+    if (x_arr_stars[i] >= x_arr[len(x_arr)-2]):
+        Lnx = secondNewton(10, difTable, t)
+    if (x_arr_stars[i] > x_arr[1] and x_arr_stars[i] < x_arr[int(len(x_arr)/2)]):
+        Lnx = firstGaus(10, difTable, t)
+    if (x_arr_stars[i] < x_arr[len(x_arr)-2] and x_arr_stars[i] > x_arr[int(len(x_arr)/2)]):
+        Lnx = secondGaus(10, difTable, t)
 
+    rnx = Lnx - f(x_arr_stars[i])
+    rnx_arr.append(rnx)
 
+for i in rnx_arr:
+    print(min(rnx_values) < i < max(rnx_values))
